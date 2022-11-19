@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\UserTransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +19,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+
 });
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', [UserAuthController::class, 'login']);
+    Route::post('register', [UserAuthController::class, 'register']);
+    Route::post('logout', [UserAuthController::class, 'logout']);
+});
+
+
+Route::group(['prefix' => 'branch', 'middleware'=>['auth:sanctum', 'role:superadmin|admin']], function () {
+    Route::resource('/', BranchController::class);
+});
+
+
+Route::group(['prefix' => 'transactions', 'middleware'=>['auth:sanctum', 'role:superadmin|admin|customer']], function () {
+    Route::post('deposit', [UserTransactionController::class, 'deposit']);
+    Route::post('withdraw', [UserTransactionController::class, 'withdraw']);
+    Route::post('transfer', [UserTransactionController::class, 'transfer']);
+    Route::post('balance', [UserTransactionController::class, 'balance']);
+    Route::get('statement/{id}', [UserTransactionController::class, 'statement']);
+});
+
+Route::post('/register', [UserAuthController::class, 'register']);
+Route::post('/login', [UserAuthController::class, 'login']);

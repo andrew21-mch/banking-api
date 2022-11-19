@@ -23,11 +23,10 @@ class Transaction extends Model
         return $this->belongsTo(Account::class);
     }
 
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(User::class);
     }
-
     public function branch()
     {
         return $this->belongsTo(Branch::class);

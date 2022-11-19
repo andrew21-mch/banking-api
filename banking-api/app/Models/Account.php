@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
 
 class Account extends Model
 {
@@ -19,7 +20,7 @@ class Account extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(User::class);
     }
 
     public function branch()
@@ -30,39 +31,6 @@ class Account extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
-    }
-
-    public function deposit($amount)
-    {
-        $this->balance += $amount;
-        $this->save();
-    }
-
-    public function withdraw($amount)
-    {
-        $this->balance -= $amount;
-        $this->save();
-    }
-
-    public function transfer($amount, $account)
-    {
-        $this->withdraw($amount);
-        $account->deposit($amount);
-    }
-
-    public function getBalance()
-    {
-        return $this->balance;
-    }
-
-    public function getAccountNumber()
-    {
-        return $this->account_id;
-    }
-
-    public function getAccountType()
-    {
-        return $this->account_type;
     }
 
     

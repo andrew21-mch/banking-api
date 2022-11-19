@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('account_num')->unique();
             $table->string('type');
-            $table->foreignId('customer_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
             $table->decimal('balance', 8, 2);
             $table->timestamps();
         });

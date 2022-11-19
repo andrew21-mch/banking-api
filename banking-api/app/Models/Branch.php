@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
 
 class Branch extends Model
 {
@@ -14,14 +15,9 @@ class Branch extends Model
         'branch_name',
     ];
 
-    public function customers()
+    public function users()
     {
-        return $this->hasMany(Customer::class);
-    }
-
-    public function employees()
-    {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(User::class);
     }
 
     public function accounts()

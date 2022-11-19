@@ -18,11 +18,11 @@ class PermissionSeeder extends Seeder
     {
         Permission::create(['name' => 'admin']);
         Permission::create(['name' => 'employee']);
-        Permission::create(['name' => 'user']);
+        Permission::create(['name' => 'customer']);
 
-        Role::create(['name' => 'admin'])->givePermissionTo('admin', 'employee', 'user');
-        Role::create(['name' => 'employee'])->givePermissionTo('employee', 'user');
-        Role::create(['name' => 'user'])->givePermissionTo('user');
-        
+        Role::create(['name' => 'admin'])->givePermissionTo('admin', 'employee', 'customer');
+        Role::create(['name' => 'employee'])->givePermissionTo('employee', 'customer');
+        Role::create(['name' => 'customer'])->givePermissionTo('customer');
+
     }
 }

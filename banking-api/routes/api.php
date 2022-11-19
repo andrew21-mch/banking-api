@@ -17,16 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-
-});
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [UserAuthController::class, 'login']);
     Route::post('register', [UserAuthController::class, 'register']);
-    Route::post('logout', [UserAuthController::class, 'logout']);
 });
+
 
 
 Route::group(['prefix' => 'branch', 'middleware'=>['auth:sanctum', 'role:super|admin']], function () {
@@ -43,9 +39,10 @@ Route::group(['prefix' => 'transactions', 'middleware'=>['auth:sanctum', 'role:c
     Route::get('statement/{id}', [UserTransactionController::class, 'statement']);
 });
 
-Route::group(['middleware'=>['auth:sanctum', 'role:superadmin|admin|employee|customer']], function () {
+Route::group(['middleware'=>['auth:sanctum', 'role:super|admin|employee|customer']], function () {
     Route::get('branch', [BranchController::class, 'index']);
     Route::get('branch/{id}', [BranchController::class, 'show']);
+    Route::post('logout', [UserAuthController::class, 'logout']);
 });
 
 Route::post('/register', [UserAuthController::class, 'register']);

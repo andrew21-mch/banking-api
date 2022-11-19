@@ -10,12 +10,10 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'transaction_id',
         'transaction_type',
         'account_id',
-        'employee_id',
         'amount',
-        'branch_code',
+        'branch_id',
     ];
 
     public function account()

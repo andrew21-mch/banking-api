@@ -155,6 +155,33 @@ class UserTransactionController extends Controller
         }
     }
 
+    public function balance(Request $request)
+    {
+        // validate incoming request
+        $validator = Validator::make($request->all(), [
+            'account_number' => ['required', 'string', 'max:255'],
+            'user_id' => ['required', 'integer', 'max:255'],
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        try {
+            $account = Account::where('account_num', $request->account_number)->first();
+            $user = User::find($request->user_id);
+
+            $validation = $this->Validation($account, $user);
+        
+            if($validation != null){
+                return $validation;
+            }
+
+            return response()->json($account->balance);
+        } catch (\Exception $th) {
+            return response()->json($th);
+        }
+    }
+
     public function statement($id)
     {
         try{
@@ -206,17 +233,17 @@ class UserTransactionController extends Controller
     public function Validation($account, $user)
     {
         if(!$user){
-            return response()->json('User does not exist', 400);
+            return response()->json('User does not exist', 404);
         }
         if(!$account){
-            return response()->json('Account does not exist', 400);
+            return response()->json('Account does not exist', 404);
         }
         if($account->user_id != $user->id){
-            return response()->json('Account does not belong to user', 400);
+            return response()->json('Account does not belong to user', 401);
         }
 
         if($user->id != auth()->user()->id){
-            return response()->json('User is not authorized to perform this transaction', 400);
+            return response()->json('User is not authorized to perform this transaction', 401);
         }
 
         if($account->status != 'active'){

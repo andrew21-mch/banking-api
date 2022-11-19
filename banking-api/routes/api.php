@@ -44,6 +44,3 @@ Route::group(['middleware'=>['auth:sanctum', 'role:super|admin|employee|customer
     Route::get('branch/{id}', [BranchController::class, 'show']);
     Route::post('logout', [UserAuthController::class, 'logout']);
 });
-
-Route::post('/register', [UserAuthController::class, 'register']);
-Route::post('/login', [UserAuthController::class, 'login']);

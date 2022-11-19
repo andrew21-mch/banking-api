@@ -127,7 +127,7 @@ class UserAuthController extends Controller
         // validate incoming request
         $validator = Validator::make($request->all(), [
             'id' => ['required', 'integer'],
-            'role' => ['required', 'string', '12'],
+            'role' => ['required', 'string', 'max:12'],
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);

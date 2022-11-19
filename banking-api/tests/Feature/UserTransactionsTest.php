@@ -104,6 +104,9 @@ class UserTransactionsTest extends TestCase
         $statement = $this->json('GET', '/api/transactions/statement/1');
         $this->withoutExceptionHandling();
         $create->assertStatus(200);
+        $create->assertJson([
+            'message' => 'success',
+        ]);
         $login->assertStatus(200);
         $deposit->assertStatus(200);
         $withdraw->assertStatus(200);

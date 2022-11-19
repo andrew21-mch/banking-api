@@ -53,11 +53,22 @@ You can now access the server at http://localhost:8000
 
 ## Testing
 
-Run the tests with:
+To test, follow the instructions below
+- create a .env.testing file and copy the content of .env.example into it
+- run the command below to create a test database
 
-```bash
+```
+php artisan test:db
+
+```
+- run the command below to run the tests
+```
 php artisan test
 ```
+
+## Usage
+Visit the link below to see the documentation for the Api
+[Here](https://documenter.getpostman.com/view/17184783/2s8YmSrKyA)
 
 ## License
 

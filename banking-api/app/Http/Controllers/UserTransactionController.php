@@ -24,12 +24,17 @@ class UserTransactionController extends Controller
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
         }
+        
+        $account = Account::where('account_num', $request->account_number)->first();
+        $user = User::find($request->user_id);
 
+        $validation = $this->Validation($account, $user);
+        
+        if($validation != null){
+            return $validation;
+        }
+        
         try {
-            $account = Account::where('account_num', $request->account_number)->first();
-            $user = User::find($request->user_id);
-
-            $this->validateAccount($account, $user);
 
             $account->balance += $request->amount;
             if(!$account->save()){
@@ -66,7 +71,11 @@ class UserTransactionController extends Controller
             $account = Account::where('account_num', $request->account_number)->first();
             $user = User::find($request->user_id);
 
-            $this->validateAccount($account, $user);
+            $validation = $this->Validation($account, $user);
+        
+            if($validation != null){
+                return $validation;
+            }
             if($account->balance < $request->amount){
                 return response()->json('Insufficient funds', 400);
             }
@@ -108,7 +117,13 @@ class UserTransactionController extends Controller
             $user = User::find($request->user_id);
 
             
-            $this->validateAccount($account, $user);
+            
+            $validation = $this->Validation($account, $user);
+        
+            if($validation != null){
+                return $validation;
+            }
+
 
             if(!$destination_account){
                 return response()->json('Destination account does not exist', 400);
@@ -146,6 +161,9 @@ class UserTransactionController extends Controller
             $user = User::find($id);
             if(!$user){
                 return response()->json('User does not exist', 400);
+            }
+            if(auth()->user()->id != $user->id && auth()->user()->role != 'admin'){
+                return response()->json('Unauthorized', 401);
             }
             $account = Account::where('user_id', $user->id)->first();
             if(!$account){
@@ -185,7 +203,7 @@ class UserTransactionController extends Controller
         }
     }
 
-    public function validateAccount($account, $user)
+    public function Validation($account, $user)
     {
         if(!$user){
             return response()->json('User does not exist', 400);
@@ -196,6 +214,15 @@ class UserTransactionController extends Controller
         if($account->user_id != $user->id){
             return response()->json('Account does not belong to user', 400);
         }
+
+        if($user->id != auth()->user()->id){
+            return response()->json('User is not authorized to perform this transaction', 400);
+        }
+
+        if($account->status != 'active'){
+            return response()->json('Account is not active', 400);
+        }
+
 
     }
 

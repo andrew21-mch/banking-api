@@ -223,7 +223,6 @@ class UserTransactionController extends Controller
             return response()->json('Account is not active', 400);
         }
 
-
     }
 
         

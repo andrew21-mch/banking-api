@@ -33,48 +33,75 @@ class UserAuthController extends Controller
             $validator = Validator::make($request->all(), [
                 'account_type' => ['required', 'string', 'max:255'],
             ]);
+
+            if($validator->fails()){
+                return response()->json($validator->errors()->toJson(), 400);
+            }
+
+            try {
+
+                $user = new User;
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->phone = $request->phone;
+                $user->city = $request->city;
+                $user->country = $request->country;
+                $user->address = $request->address;
+                $user->dob = $request->dob;
+                $user->branch_code = $request->branch_code;
+                $user->save();
+    
+                $user->assignRole('customer');    
+    
+                $branch = Branch::find($request->branch_code);
+    
+                if($request->create_account == true){
+                // create user account
+                $account = new Account;
+                $account->account_num = $this->generateAccountNumber($branch, $user);
+                $account->type = $request->account_type;
+                $account->balance = 0;
+                $account->user_id = $user->id;
+    
+                $user->accounts()->save($account);
+                }
+    
+                return $this->userResponse($user);
+    
+            } catch (\Exception $e) {
+                $user->delete();
+                $account->delete();
+                return response()->json(['message' => $e], 409);
+            }
+
+        }
+        else{
+            try{
+                $user = new User;
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->phone = $request->phone;
+                $user->city = $request->city;
+                $user->country = $request->country;
+                $user->address = $request->address;
+                $user->dob = $request->dob;
+                $user->branch_code = $request->branch_code;
+                $user->save();
+
+                return response()->json($user, 201);
+            }  catch (\Exception $e) {
+                $user->delete();
+                return response()->json(['message' => $e], 409);
+            }
+
+           
+
+
         }
 
-
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
-
-        try {
-
-            $user = new User;
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->phone = $request->phone;
-            $user->city = $request->city;
-            $user->country = $request->country;
-            $user->address = $request->address;
-            $user->dob = $request->dob;
-            $user->branch_code = $request->branch_code;
-            $user->save();
-
-            $user->assignRole('customer');    
-
-            $branch = Branch::find($request->branch_code);
-
-            // create user account
-            $account = new Account;
-            $account->account_num = $this->generateAccountNumber($branch, $user);
-            $account->type = $request->account_type;
-            $account->balance = 0;
-            $account->user_id = $user->id;
-
-            $user->accounts()->save($account);
-
-            return $this->userResponse($user);
-
-        } catch (\Exception $e) {
-            $user->delete();
-            $account->delete();
-            return response()->json(['message' => $e], 409);
-        }
+        
     }
 
     public function login(Request $request)

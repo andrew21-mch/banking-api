@@ -56,22 +56,20 @@ class UserAuthController extends Controller
     
                 $branch = Branch::find($request->branch_code);
     
-                if($request->create_account == true){
-                // create user account
                 $account = new Account;
                 $account->account_num = $this->generateAccountNumber($branch, $user);
                 $account->type = $request->account_type;
                 $account->balance = 0;
                 $account->user_id = $user->id;
     
-                $user->accounts()->save($account);
+                if(!$account->save()){
+                    return response()->json('Error creating account', 500);
                 }
     
                 return $this->userResponse($user);
     
-            } catch (\Exception $e) {
+            } catch (\Error $e) {
                 $user->delete();
-                $account->delete();
                 return response()->json(['message' => $e], 409);
             }
 

@@ -53,9 +53,16 @@ You can now access the server at http://localhost:8000
 
 ## Testing
 
-Run the tests with:
+To test, follow the instructions below
+- create a .env.testing file and copy the content of .env.example into it
+- run the command below to create a test database
 
-```bash
+```
+php artisan test:db
+
+```
+- run the command below to run the tests
+```
 php artisan test
 ```
 

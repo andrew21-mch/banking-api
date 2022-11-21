@@ -146,7 +146,10 @@ class UserAuthController extends Controller
     {
         $user->load('roles:name');
         $user->branch = Branch::find($user->branch_code);
-        return response()->json($user);
+        return response()->json([
+            'message' => 'success',
+            'user' => $user
+        ]);
     }
 
     public function updateRole(Request $request)

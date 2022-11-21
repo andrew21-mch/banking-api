@@ -59,6 +59,10 @@ Run the tests with:
 php artisan test
 ```
 
+## Usage
+Visit the link below to see the documentation for the Api
+[Here](https://documenter.getpostman.com/view/17184783/2s8YmSrKyA)
+
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

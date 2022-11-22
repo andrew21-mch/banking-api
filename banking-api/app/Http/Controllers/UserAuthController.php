@@ -28,7 +28,6 @@ class UserAuthController extends Controller
 
         ]);
 
-        // if create account is true, make sure account number is unique
         if($request->create_account == true){
             $validator = Validator::make($request->all(), [
                 'account_type' => ['required', 'string', 'max:255'],

@@ -107,6 +107,7 @@ class UserTransactionsTest extends TestCase
         $create->assertJson([
             'message' => 'success',
         ]);
+
         $login->assertStatus(200);
         $deposit->assertStatus(200);
         $withdraw->assertStatus(200);

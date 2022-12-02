@@ -80,6 +80,6 @@ Thank you for considering contributing to this project! Please read the [contrib
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within this project, please send an e-mail to Taylor Otwell via [nfonandrew73@gmail.com](mailto:nfonandrew73@gmail.com). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within this project, please send an e-mail to Nfon Andrew [nfonandrew73@gmail.com](mailto:nfonandrew73@gmail.com). All security vulnerabilities will be promptly addressed.
 
 Thanks for using this project!
